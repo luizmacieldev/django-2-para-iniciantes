@@ -1,0 +1,16 @@
+{% extends "items/base.html" %}
+
+{% block content %}
+<h1>{{ mensagem }}</h1>
+
+{{ produtos }}
+<ul>
+    {% for produto in produtos %}
+    <li>Nome: {{ produto.nome }}</li>
+    <li>Preço: {{ produto.preco }}</li>
+    <li>Descrição: {{ produto.descricao }}</li>
+    <hr />
+    {% endfor %}
+</ul>
+
+{% endblock content %}

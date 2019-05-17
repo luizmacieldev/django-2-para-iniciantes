@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="py-4"></div>
+    <form  method="GET">
+        <div class="row">
+            <div class="col-8 form-group">
+                <input type="search" class="form-control" name="q" placeholder="Informe um nome,email ou cpf" value="{{ request.GET.q}}">
+            </div>
+            <div class="col-2 form-group">
+                <button type="submit" class="btn btn-success">Pesquisar</button>
+            </div>
+        </div>
+        </form>
+<table class="table table-head">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Cpf</th>
+            <th>Data de Criação</th>
+            {% if user.is_authenticated %}
+            <th>Opções</th>
+            <th></th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for cliente in clientes %}
+        <tr>
+            <td>{{ cliente.nome }}</td>
+            <td>{{ cliente.email }}</td>
+            <td>{{ cliente.cpf }}</td>
+            <td>{{ cliente.data_criacao }}</td>
+            {% if user.is_authenticated %}
+            <td><a href="/editar_cliente/{{ cliente.id }}" class="btn btn-warning">Editar</a></td>
+            <td><a href="/remover_cliente/{{ cliente.id }}" class="btn btn-danger">Excluir</a></td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+
+</table>
+{{ clientes }}
+</div>
+{% endblock content %}
