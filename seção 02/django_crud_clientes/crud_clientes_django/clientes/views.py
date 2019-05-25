@@ -3,18 +3,24 @@ from .models import Cliente
 from .forms import ClienteForm
 from django.contrib import messages
 from django.db.models import Q
+from django.core.paginator import Paginator
+
 
 # Create your views here.
 
 def lista_de_clientes(request):
     clientes = Cliente.objects.all().order_by('-id')
     queryset = request.GET.get('q')
+
     if queryset:
         clientes = Cliente.objects.filter(
-            Q(nome__icontains=queryset)|  #LIKE % nome %
-            Q(email__icontains=queryset)|
+            Q(nome__icontains=queryset)|
+            Q(email__icontains=queryset)| # LIKE % ana %
             Q(cpf__icontains=queryset)
         )
+    paginator = Paginator(clientes, 5) 
+    page = request.GET.get('page')
+    clientes = paginator.get_page(page)
 
     return render(request,"clientes/lista_de_clientes.html",{'clientes':clientes})
 

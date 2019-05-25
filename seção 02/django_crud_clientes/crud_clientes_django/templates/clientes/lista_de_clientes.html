@@ -3,16 +3,16 @@
 {% block content %}
 <div class="container">
     <div class="py-4"></div>
-    <form  method="GET">
+    <form method="GET">
         <div class="row">
-            <div class="col-8 form-group">
-                <input type="search" class="form-control" name="q" placeholder="Informe um nome,email ou cpf" value="{{ request.GET.q}}">
+            <div class="form-group col-10">
+                <input type="search" class="form-control" placeholder="Informe o nome do cliente,cpf ou email" name="q" value="{{ request.GET.q}}">
             </div>
-            <div class="col-2 form-group">
-                <button type="submit" class="btn btn-success">Pesquisar</button>
+            <div class="form-group col-2">
+                <button class="form-control btn-success">Pesquisar</button>
             </div>
         </div>
-        </form>
+    </form>
 <table class="table table-head">
     <thead>
         <tr>
@@ -32,7 +32,7 @@
             <td>{{ cliente.nome }}</td>
             <td>{{ cliente.email }}</td>
             <td>{{ cliente.cpf }}</td>
-            <td>{{ cliente.data_criacao }}</td>
+            <td>{{ cliente.data_criacao|date:"d/m/Y" }}</td>
             {% if user.is_authenticated %}
             <td><a href="/editar_cliente/{{ cliente.id }}" class="btn btn-warning">Editar</a></td>
             <td><a href="/remover_cliente/{{ cliente.id }}" class="btn btn-danger">Excluir</a></td>
@@ -42,6 +42,24 @@
     </tbody>
 
 </table>
-{{ clientes }}
+
+<div class="pagination">
+    <span class="step-links">
+        {% if clientes.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ clientes.previous_page_number }}&q={% if request.GET.q %}{{ request.GET.q }}{% endif %}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ clientes.number }} of {{ clientes.paginator.num_pages }}.
+        </span>
+
+        {% if clientes.has_next %}
+            <a href="?page={{ clientes.next_page_number }}&q={% if request.GET.q %}{{ request.GET.q }}{% endif %}">next</a>
+            <a href="?page={{ clientes.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
 </div>
 {% endblock content %}
